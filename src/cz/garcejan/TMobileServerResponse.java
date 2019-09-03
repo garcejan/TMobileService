@@ -1,0 +1,9 @@
+package cz.garcejan;
+
+public enum TMobileServerResponse {
+    LOGIN_SUCCESSFUL,
+    INVALID_USERNAME_OR_PASSWORD,
+    LOCKED_ACCOUNT,
+    SERVER_CONNECTION_FAILED,
+    INVALID_SERVER_URL
+}
