@@ -261,7 +261,7 @@ public class TMobileService implements TMobileServiceInterface {
      *
      * @param phoneNumber
      * @param name        = name of the page we want to travel
-     * @param seconds     = waiting time for loading
+     * @param seconds     = sleep time for loading
      * @return page depending on name
      * @throws IOException
      * @throws LogoutException
