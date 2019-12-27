@@ -135,7 +135,7 @@ public class TMobileService implements TMobileServiceInterface {
     public void resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
         System.out.println("Reset data roaming limit");
 
-        HtmlPage foreignPage = travelToPage(phoneNumber, "Zahraničí", 5);
+        HtmlPage foreignPage = travelToPage(phoneNumber, "Zahraničí", 10);
         List<HtmlTable> tables = foreignPage.getByXPath("/html/body//table");
 
         for (HtmlTable table : tables) {
@@ -147,12 +147,12 @@ public class TMobileService implements TMobileServiceInterface {
         }
     }
 
-    //TODO test
+    //TODO test + predelat navratovej typ
     @Override
     public void holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
         System.out.println("Holiday suspending");
 
-        HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 5);
+        HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 10);
 
         //TODO
 
@@ -261,7 +261,7 @@ public class TMobileService implements TMobileServiceInterface {
      *
      * @param phoneNumber
      * @param name        = name of the page we want to travel
-     * @param seconds
+     * @param seconds     = waiting time for loading
      * @return page depending on name
      * @throws IOException
      * @throws LogoutException

@@ -1,7 +1,5 @@
 package cz.garcejan;
 
-import net.bytebuddy.asm.Advice;
-
 import java.util.Map;
 
 public class Main {
@@ -196,15 +194,17 @@ public class Main {
     }
 
     @SuppressWarnings("Duplicates")
-    private static void resetDataRoamingTests() {
+    private static void activationTests() {
 
         // test0
         try{
             TMobileService test0 = new TMobileService();
-            if ( ! test0.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test0.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test0 failed");
 
             test0.resetDataRoamingLimit("720205492");
+            System.out.println("============================================================================================================");
+            test0.holidaySuspending("720205492");
             System.out.println("============================================================================================================");
 
         }
@@ -212,7 +212,6 @@ public class Main {
             e.printStackTrace();
             System.out.println("Reset data roaming limit test0 failed");
         }
-
 
     }
 
@@ -263,8 +262,8 @@ public class Main {
         try {
             //loginTests();
             //myTariffTests();
-            serviceSettingsTests();
-            //resetDataRoamingTests();
+            //serviceSettingsTests();
+            activationTests();
             //tests();
 
         } catch (Exception e) {
