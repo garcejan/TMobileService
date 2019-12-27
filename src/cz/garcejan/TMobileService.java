@@ -132,7 +132,7 @@ public class TMobileService implements TMobileServiceInterface {
 
     //TODO test
     @Override
-    public void resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
+    public boolean resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
         System.out.println("Reset data roaming limit");
 
         HtmlPage foreignPage = travelToPage(phoneNumber, "Zahraničí", 10);
@@ -141,15 +141,16 @@ public class TMobileService implements TMobileServiceInterface {
         for (HtmlTable table : tables) {
             if (table.getCaptionText().equals("Služby v roamingu")) {
                 System.out.println("Table " + table.getCaptionText() + " found!");
-                serviceActivation(table, "Data Roaming Limit - Reset");
-                return;
+                boolean flag = serviceActivation(table, "Data Roaming Limit - Reset");
+                return flag;
             }
         }
+        return false;
     }
 
     //TODO test + predelat navratovej typ
     @Override
-    public void holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
+    public boolean holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
         System.out.println("Holiday suspending");
 
         HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 10);
@@ -161,11 +162,11 @@ public class TMobileService implements TMobileServiceInterface {
         for (HtmlTable table : tables) {
             if (table.getCaptionText().equals("Pozastavení služeb")) {
                 System.out.println("Table " + table.getCaptionText() + " found!");
-                serviceActivation(table, "Suspendace - Prázdniny");
-                return;
+                boolean flag = serviceActivation(table, "Suspendace - Prázdniny");
+                return flag;
             }
         }
-
+        return false;
     }
 
     /*
@@ -181,7 +182,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @param serviceName = name of the service
      * @throws IOException
      */
-    private void serviceActivation(HtmlTable table, String serviceName) throws IOException {
+    private boolean serviceActivation(HtmlTable table, String serviceName) throws IOException {
 
         for (HtmlTableRow tableRow : table.getRows()) {
             System.out.println("tableRow: " + tableRow.asText());
@@ -192,9 +193,10 @@ public class TMobileService implements TMobileServiceInterface {
                 System.out.println(tableRow.getCell(0).asText() + " - " + tableRow.getElementsByTagName("a").get(0).asText());
                 tableRow.getElementsByTagName("a").get(0).click();
                 System.out.println("Activation successful");
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     /**
@@ -257,7 +259,7 @@ public class TMobileService implements TMobileServiceInterface {
      */
 
     /**
-     * Thanks this method methods getMyTariff & getServiceSettings get right page
+     * This method gets you to @param name page of number @param phoneNumber
      *
      * @param phoneNumber
      * @param name        = name of the page we want to travel
@@ -274,7 +276,8 @@ public class TMobileService implements TMobileServiceInterface {
             overviewPage = overviewPage (phoneNumber);
             isFirst = false;
         }
-*/
+        */
+
         overviewPage = openSideNav(overviewPage);
         System.out.println("sidenav: " + overviewPage.asText());
 

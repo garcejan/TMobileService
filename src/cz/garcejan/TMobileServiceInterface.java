@@ -53,7 +53,7 @@ public interface TMobileServiceInterface {
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
      */
-    public void resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException;
+    public boolean resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException;
 
-    public void holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException;
+    public boolean holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException;
 }
