@@ -148,15 +148,12 @@ public class TMobileService implements TMobileServiceInterface {
         return false;
     }
 
-    //TODO test + predelat navratovej typ
+    //TODO test
     @Override
     public boolean holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
         System.out.println("Holiday suspending");
 
         HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 10);
-
-        //TODO
-
         List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
 
         for (HtmlTable table : tables) {
@@ -185,7 +182,7 @@ public class TMobileService implements TMobileServiceInterface {
     private boolean serviceActivation(HtmlTable table, String serviceName) throws IOException {
 
         for (HtmlTableRow tableRow : table.getRows()) {
-            System.out.println("tableRow: " + tableRow.asText());
+            //System.out.println("tableRow: " + tableRow.asText());
             if (tableRow.getCells().size() != 5)
                 continue;
 
@@ -197,28 +194,6 @@ public class TMobileService implements TMobileServiceInterface {
             }
         }
         return false;
-    }
-
-    /**
-     * Submethod to resetDataRoamingLimit
-     *
-     * @param htmlTable
-     * @throws IOException
-     */
-    private void resetDataRoamingLimitActivation(HtmlTable htmlTable) throws IOException {
-
-        for (HtmlTableRow tableRow : htmlTable.getRows()) {
-            System.out.println("tableRow: " + tableRow.asText());
-            if (tableRow.getCells().size() != 5)
-                continue;
-
-            if (tableRow.getCell(0).asText().equals("Data Roaming Limit - Reset")) {
-                System.out.println("Data Roaming Limit - Reset " + tableRow.getElementsByTagName("a").get(0).asText());
-                tableRow.getElementsByTagName("a").get(0).click();
-                System.out.println("Reset data roaming limit success");
-                return;
-            }
-        }
     }
 
      /*
@@ -285,7 +260,7 @@ public class TMobileService implements TMobileServiceInterface {
 
         sleep(seconds);
 
-        System.out.println("Final page: " + page.asText());
+        System.out.println("Final page: \n" + page.asText());
 
         return page;
     }
@@ -309,9 +284,6 @@ public class TMobileService implements TMobileServiceInterface {
         HtmlPage tmpPage = findButton.click();
         sleep(6);
 
-
-        System.out.println("tmpPage: " + tmpPage.asText());
-
         return findPhoneNumberPage(tmpPage, phoneNumber);
     }
 
@@ -327,7 +299,7 @@ public class TMobileService implements TMobileServiceInterface {
     private HtmlPage findPhoneNumberPage(HtmlPage page, String phoneNumber) throws IOException, UnknownNumberException {
         List<HtmlTable> tables = page.getByXPath("/html/body//table");
         for (HtmlTable table : tables) {
-            System.out.println(table.asText());
+            //System.out.println(table.asText());
 
             for (HtmlTableRow tableRow : table.getRows()) {
                 if (tableRow.getCell(0).asText().equals(phoneNumber)) {

@@ -8,7 +8,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5723f16e-72dd-4987-a6e0-a44e17d49376" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/src/cz/garcejan/TMobileService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/garcejan/TMobileService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cz/garcejan/TMobileServiceInterface.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/garcejan/TMobileServiceInterface.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -25,12 +24,11 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="523">
-              <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
+            <state relative-caret-position="244">
+              <caret line="216" column="30" selection-start-line="216" selection-start-column="23" selection-end-line="216" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#login#0;class#TMobileService#0" />
-                <element signature="method#resetDataRoamingLimitActivation#0;class#TMobileService#0" />
                 <element signature="method#overviewPage#0;class#TMobileService#0" />
                 <element signature="method#findPhoneNumberPage#0;class#TMobileService#0" />
                 <element signature="method#nextPage#0;class#TMobileService#0" />
@@ -106,7 +104,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>overviewPage:</find>
       <find>tmpPage</find>
       <find>overviewPage</find>
       <find>findAnchor</find>
@@ -136,6 +133,7 @@
       <find>Suspend</find>
       <find>============================================================================================================</find>
       <find>seconds</find>
+      <find>println</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -270,12 +268,12 @@
       <updated>1564390551551</updated>
       <workItem from="1564390554746" duration="104723000" />
       <workItem from="1565702171905" duration="35692000" />
-      <workItem from="1577460111689" duration="9912000" />
+      <workItem from="1577460111689" duration="10246000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="150327000" />
+    <option name="totallyTimeSpent" value="150661000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -299,7 +297,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32939914" />
-      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4994664" visible="true" weight="0.22663802" />
+      <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4994664" visible="true" weight="0.13104188" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.63733906" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -493,12 +491,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="523">
-          <caret line="198" column="21" selection-start-line="198" selection-start-column="21" selection-end-line="198" selection-end-column="21" />
+        <state relative-caret-position="244">
+          <caret line="216" column="30" selection-start-line="216" selection-start-column="23" selection-end-line="216" selection-end-column="30" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#login#0;class#TMobileService#0" />
-            <element signature="method#resetDataRoamingLimitActivation#0;class#TMobileService#0" />
             <element signature="method#overviewPage#0;class#TMobileService#0" />
             <element signature="method#findPhoneNumberPage#0;class#TMobileService#0" />
             <element signature="method#nextPage#0;class#TMobileService#0" />
