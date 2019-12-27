@@ -1,27 +1,35 @@
 package cz.garcejan;
 
+import net.bytebuddy.asm.Advice;
+
 import java.util.Map;
 
 public class Main {
 
-    private static void loginTests (){
+    private static void loginTests () throws Exception {
 
         System.out.println("--------------LOGIN TESTS STARTED--------------");
 
         // successful login
         TMobileService test0 = new TMobileService();
-        if ( ! test0.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+        if ( ! test0.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL)){
             System.out.println("test0 failed");
+            throw new Exception();
+        }
 
         // account is locked
         TMobileService test1 = new TMobileService();
-        if ( ! test1.login("aaaa", "aaaa").equals( TMobileServerResponse.LOCKED_ACCOUNT))
+        if ( ! test1.login("aaaa", "aaaa").equals( TMobileServerResponse.LOCKED_ACCOUNT)){
             System.out.println("test1 failed");
+            throw new Exception();
+        }
 
         // invalid username or password
         TMobileService test2 = new TMobileService();
-        if ( ! test2.login("bbbb", "aaaa").equals( TMobileServerResponse.INVALID_USERNAME_OR_PASSWORD))
+        if ( ! test2.login("bbbb", "aaaa").equals( TMobileServerResponse.INVALID_USERNAME_OR_PASSWORD)) {
             System.out.println("test2 failed");
+            throw new Exception();
+        }
 
 /*
         // without internet connection
@@ -40,13 +48,13 @@ public class Main {
     }
 
     @SuppressWarnings("Duplicates")
-    private static void myTariffTests() {
+    private static void myTariffTests() throws Exception {
         System.out.println("--------------MY TARIFF TESTS STARTED--------------");
 
         // test0
         try{
             TMobileService test0 = new TMobileService();
-            if ( ! test0.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test0.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test0 failed");
 
             TMobileMyTariff tMobileMyTariff = test0.getMyTariff("720205492");
@@ -71,13 +79,13 @@ public class Main {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("MyTariff test0 failed");
+            throw new Exception("MyTariff test0 failed");
         }
 
         // test1
         try{
             TMobileService test1 = new TMobileService();
-            if ( ! test1.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test1.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test1 failed");
 
             TMobileMyTariff tMobileMyTariff = test1.getMyTariff("twehagh");
@@ -99,7 +107,7 @@ public class Main {
         // test2
         try{
             TMobileService test2 = new TMobileService();
-            if ( ! test2.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test2.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test2 failed");
 
             TMobileMyTariff  tMobileMyTariff = test2.getMyTariff("739316504");
@@ -115,20 +123,20 @@ public class Main {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("MyTariff test2 failed");
+            throw new Exception("MyTariff test2 failed");
         }
 
         System.out.println("--------------MY TARIFF TESTS FINISHED--------------");
     }
 
     @SuppressWarnings("Duplicates")
-    private static void serviceSettingsTests() {
+    private static void serviceSettingsTests() throws Exception {
         System.out.println("--------------SERVICE SETTINGS TESTS STARTED--------------");
 
         // test0
         try{
             TMobileService test0 = new TMobileService();
-            if ( ! test0.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test0.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test0 failed");
 
             TMobileServiceSettings tMobileServiceSettings = test0.getServiceSettings("720205492");
@@ -138,29 +146,16 @@ public class Main {
                 System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
             }
             System.out.println("============================================================================================================");
-/*
-
-
-            TMobileServiceSettings tMobileServiceSettings1 = test0.getServiceSettings("720205492");
-            System.out.println("============================================================================================================");
-            for (Map.Entry entry : tMobileServiceSettings1.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-*/
-
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Service settings test0 failed");
+            throw new Exception("ServiceSettings test0 failed");
         }
-
-/*
 
         // test1
         try{
             TMobileService test1 = new TMobileService();
-            if ( ! test1.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test1.login("1105092013", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test1 failed");
 
             TMobileServiceSettings tMobileServiceSettings = test1.getServiceSettings("twehagh");
@@ -180,7 +175,7 @@ public class Main {
         // test2
         try{
             TMobileService test2 = new TMobileService();
-            if ( ! test2.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test2.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test2 failed");
 
             TMobileServiceSettings tMobileServiceSettings = test2.getServiceSettings("739316504");
@@ -194,14 +189,31 @@ public class Main {
         }
         catch (Exception e){
             e.printStackTrace();
-            System.out.println("Service settings test2 failed");
+            throw new Exception("Service settings test0 failed");
         }
-*/
-
-
-
 
         System.out.println("--------------SERVICE SETTINGS TESTS FINISHED--------------");
+    }
+
+    @SuppressWarnings("Duplicates")
+    private static void resetDataRoamingTests() {
+
+        // test0
+        try{
+            TMobileService test0 = new TMobileService();
+            if ( ! test0.login("igar007", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+                System.out.println("test0 failed");
+
+            test0.resetDataRoamingLimit("720205492");
+            System.out.println("============================================================================================================");
+
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            System.out.println("Reset data roaming limit test0 failed");
+        }
+
+
     }
 
     @SuppressWarnings("Duplicates")
@@ -248,9 +260,16 @@ public class Main {
     }
 
     public static void main(String[] args) {
+        try {
             //loginTests();
             //myTariffTests();
-            //serviceSettingsTests();
-            tests();
+            serviceSettingsTests();
+            //resetDataRoamingTests();
+            //tests();
+
+        } catch (Exception e) {
+            System.out.println(e);
+            System.exit(1);
+        }
     }
 }

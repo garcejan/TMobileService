@@ -9,10 +9,9 @@ public class TMobileServiceSettings extends TMobilePageAbstract {
 
     public void saveDataFromTables(List<HtmlTable> tables) {
         for (HtmlTable table : tables) {
-            try{
+            try {
                 saveDataFromTable(table);
-            }
-            catch ( InvalidTableException ite ){
+            } catch (InvalidTableException ite) {
             }
         }
     }
@@ -22,9 +21,9 @@ public class TMobileServiceSettings extends TMobilePageAbstract {
         StringBuilder sb = new StringBuilder("TMobileServiceSettings{");
 
 
-        for ( String key : data.keySet()){
-            for ( TMobileData x : data.get(key)){
-                sb.append( x.toString());
+        for (String key : data.keySet()) {
+            for (TMobileData x : data.get(key)) {
+                sb.append(x.toString());
             }
         }
 

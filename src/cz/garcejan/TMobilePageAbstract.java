@@ -10,13 +10,9 @@ public abstract class TMobilePageAbstract {
 
     protected Map<String, List<TMobileData>> data = new HashMap<>();
 
-    public Map<String, List<TMobileData>> getData() {
-        return data;
-    }
-
-
     /**
      * Abstract method. Is implemented in TMobileServiceSettings & TMobileMyTariff
+     *
      * @param tables
      * @throws InvalidTableException
      */
@@ -24,6 +20,7 @@ public abstract class TMobilePageAbstract {
 
     /**
      * Returns all data get from table and save them to Map<String, List<TMobileData>> data
+     *
      * @param table
      * @throws InvalidTableException when table is not recognized
      */
@@ -38,7 +35,7 @@ public abstract class TMobilePageAbstract {
         for (HtmlTableRow tableRow : table.getRows()) {
             switch (tableRow.getCells().size()) {
                 case 1:
-                    if (!isFirst){
+                    if (!isFirst) {
                         List<TMobileData> tmp = new ArrayList<>(list);
                         tmpMap.put(title, tmp);
                         list.clear();
@@ -52,7 +49,7 @@ public abstract class TMobilePageAbstract {
                 case 0:
                     break;
                 default:
-                    throw new InvalidTableException ("Unknown table while saving data from table " + table.getCaptionText());
+                    throw new InvalidTableException("Unknown table while saving data from table " + table.getCaptionText());
 
             }
         }
@@ -63,6 +60,7 @@ public abstract class TMobilePageAbstract {
 
     /**
      * Parse tableRow to TMobileData. Called from saveDataFromTable
+     *
      * @param tableRow
      * @return data gained from tableRow
      */
@@ -73,7 +71,8 @@ public abstract class TMobilePageAbstract {
         //service is enabled
         boolean enabled = true;
 
-        if (tableRow.getCell(4).asText().contains("Aktivovat")){
+        if (tableRow.getCell(4).asText().contains("Aktivovat")
+                || tableRow.getCell(4).asText().contains("Odblokovat")) {
             enabled = false;
         }
 
@@ -88,17 +87,23 @@ public abstract class TMobilePageAbstract {
 
     /**
      * Called from parseRow
+     *
      * @return parsed double from @param string
      */
     private double parsePrice(String string) {
         Scanner scanner = new Scanner(string);
-        if ( scanner.hasNextDouble())
+        if (scanner.hasNextDouble())
             return scanner.nextDouble();
-        if ( scanner.hasNextInt())
+        if (scanner.hasNextInt())
             return scanner.nextInt();
         return 0;
     }
 
     @Override
     public abstract String toString();
+
+    public Map<String, List<TMobileData>> getData() {
+        return data;
+    }
+
 }
