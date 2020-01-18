@@ -4,6 +4,7 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.*;
 import cz.garcejan.TMobileExceptions.InvalidTableException;
 import cz.garcejan.TMobileExceptions.LogoutException;
+import cz.garcejan.TMobileExceptions.ServiceAlreadyActivatedException;
 import cz.garcejan.TMobileExceptions.UnknownNumberException;
 
 import java.io.*;
@@ -17,14 +18,13 @@ public class TMobileService implements TMobileServiceInterface {
     private HtmlPage mainPage;
     private HtmlPage overviewPage; //overview page of the phone number you choose
 
-    private boolean isFirst = true; //check if public methods have already been used or not
+    // private boolean isFirst = true; //check if public methods have already been used or not, only for overviewPage
 
     /*
       |=================================================================================================================
-      | RESET DATA ROAMING LIMIT METHODS
+      | LOGIN
       |=================================================================================================================
      */
-
     /**
      * This method connects to your T-Mobile account.
      *
@@ -75,12 +75,40 @@ public class TMobileService implements TMobileServiceInterface {
             return TMobileServerResponse.INVALID_SERVER_URL;
         }
 
-        TMobileServerResponse response = getResponse();
+        TMobileServerResponse response = getServerResponse();
         return response;
     }
 
+    /**
+     * Easy submethod of method login.
+     *
+     * @return server response if connection succeeded or not.
+     */
+    private TMobileServerResponse getServerResponse() {
+        if (mainPage.asText().contains("Kód chyby: G 706")) {
+            System.out.println("INVALID_USERNAME_OR_PASSWORD");
+            return TMobileServerResponse.INVALID_USERNAME_OR_PASSWORD;
+        }
 
-    //TODO logout
+        if (mainPage.asText().contains("Kód chyby: G 701")) {
+            System.out.println("LOCKED_ACCOUNT");
+            return TMobileServerResponse.LOCKED_ACCOUNT;
+        }
+
+        if (mainPage.asText().contains("Vítejte v Můj T-Mobile") || mainPage.asText().contains("Bleskový přehled")) {
+            System.out.println("LOGIN_SUCCESSFUL");
+            return TMobileServerResponse.LOGIN_SUCCESSFUL;
+        }
+
+        System.out.println("SERVER_CONNECTION_FAILED - Unknown failure");
+        return TMobileServerResponse.SERVER_CONNECTION_FAILED;
+    }
+
+    /*
+      |=================================================================================================================
+      | LOGIN END
+      |=================================================================================================================
+     */
 
     /**
      * You have to use login(String username, String password ) first to sign up.
@@ -98,7 +126,7 @@ public class TMobileService implements TMobileServiceInterface {
         System.out.println("My tariff");
         TMobileMyTariff tMobileMyTariff = new TMobileMyTariff();
 
-        HtmlPage myTariffPage = travelToPage(phoneNumber, "Můj tarif", 3);
+        HtmlPage myTariffPage = getPageByName(phoneNumber, "Můj tarif", 3);
 
         List<HtmlTable> tables = myTariffPage.getByXPath("/html/body//table");
         tMobileMyTariff.saveDataFromTables(tables);
@@ -122,7 +150,7 @@ public class TMobileService implements TMobileServiceInterface {
         System.out.println("Service settings");
         TMobileServiceSettings serviceSettings = new TMobileServiceSettings();
 
-        HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 5);
+        HtmlPage serviceSettingsPage = getPageByName(phoneNumber, "Nastavení služeb", 5);
 
         List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
         serviceSettings.saveDataFromTables(tables);
@@ -130,47 +158,148 @@ public class TMobileService implements TMobileServiceInterface {
         return serviceSettings;
     }
 
-    //TODO test
-    @Override
-    public boolean resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
-        System.out.println("Reset data roaming limit");
-
-        HtmlPage foreignPage = travelToPage(phoneNumber, "Zahraničí", 10);
-        List<HtmlTable> tables = foreignPage.getByXPath("/html/body//table");
-
-        for (HtmlTable table : tables) {
-            if (table.getCaptionText().equals("Služby v roamingu")) {
-                System.out.println("Table " + table.getCaptionText() + " found!");
-                boolean flag = serviceActivation(table, "Data Roaming Limit - Reset");
-                return flag;
-            }
-        }
-        return false;
-    }
-
-    //TODO test
-    @Override
-    public boolean holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException {
-        System.out.println("Holiday suspending");
-
-        HtmlPage serviceSettingsPage = travelToPage(phoneNumber, "Nastavení služeb", 10);
-        List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
-
-        for (HtmlTable table : tables) {
-            if (table.getCaptionText().equals("Pozastavení služeb")) {
-                System.out.println("Table " + table.getCaptionText() + " found!");
-                boolean flag = serviceActivation(table, "Suspendace - Prázdniny");
-                return flag;
-            }
-        }
-        return false;
-    }
 
     /*
       |=================================================================================================================
       | ACTIVATION METHODS
       |=================================================================================================================
      */
+    public TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
+        System.out.println("Reset data roaming limit");
+
+        HtmlPage foreignPage = getPageByName(phoneNumber, "Zahraničí", 10);
+        List<HtmlTable> tables = foreignPage.getByXPath("/html/body//table");
+
+        for (HtmlTable table : tables) {
+
+            if (table.getCaptionText().equals("Služby v roamingu")) {
+                System.out.println("Table " + table.getCaptionText() + " found!");
+
+
+                HtmlPage page = null;
+                try {
+                    page = serviceActivation(table, "Data Roaming Limit - Reset");
+                } catch (ServiceAlreadyActivatedException e) {
+                    return TMobileServerResponse.SERVICE_ALREADY_ACTIVATED;
+                }
+
+                if ( page != null ){
+                    System.out.println("Restart data roaming limit successful");
+                    return TMobileServerResponse.ACTIVATION_SUCCESSFUL;
+                }
+                else throw new NullPointerException();
+            }
+        }
+
+        return TMobileServerResponse.ACTIVATION_FAILED;
+    }
+
+    //TODO test
+    public TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
+        System.out.println("Holiday suspending");
+
+        HtmlPage serviceSettingsPage = getPageByName(phoneNumber, "Nastavení služeb", 10);
+        List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
+
+        System.out.println(serviceSettingsPage.asText());
+        for (HtmlTable table : tables) {
+
+            if (table.getCaptionText().equals("Pozastavení služeb")) {
+                System.out.println("Table " + table.getCaptionText() + " found!");
+
+                HtmlPage confirmationPage = null;
+
+                try {
+                    confirmationPage = serviceActivation(table, "Suspendace - Prázdniny");
+                } catch (ServiceAlreadyActivatedException e){
+                    return TMobileServerResponse.SERVICE_ALREADY_ACTIVATED;
+                }
+
+                if ( confirmationPage != null ){
+                    TMobileServerResponse confirmResponse = confirmHolidaySuspending(confirmationPage, from, to);
+                    return confirmResponse;
+                }
+                else throw new NullPointerException();
+
+            }
+        }
+
+        return TMobileServerResponse.ACTIVATION_FAILED;
+    }
+
+    public TMobileServerResponse deactivateHolidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
+        System.out.println("Deactivate holiday suspending");
+
+        HtmlPage serviceSettingsPage = getPageByName(phoneNumber, "Nastavení služeb", 10);
+        List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
+
+        for (HtmlTable table : tables) {
+            if (table.getCaptionText().equals("Pozastavení služeb")) {
+                System.out.println("Table " + table.getCaptionText() + " found!");
+
+                HtmlPage confirmationPage = null;
+                try {
+                    confirmationPage = serviceDeactivation(table, "Suspendace - Prázdniny");
+                } catch (ServiceAlreadyActivatedException e) {
+                    return TMobileServerResponse.SERVICE_ALREADY_DEACTIVATED;
+                }
+
+                if ( confirmationPage != null ){
+                    TMobileServerResponse confirmResponse = confirmOrder( confirmationPage ); // TODO VRACI SPATNY RESPONSE
+                    return confirmResponse;
+                }
+                else throw new NullPointerException();
+
+            }
+        }
+
+        return TMobileServerResponse.DEACTIVATION_FAILED;
+    }
+
+    private TMobileServerResponse confirmHolidaySuspending(HtmlPage confirmationPage, String from, String to) throws IOException {
+
+        List<HtmlForm> forms = confirmationPage.getForms();
+        final HtmlForm confirmationForm = forms.get(2); // 3rd on the pag
+        final HtmlTextInput fromTextBox = confirmationForm.getInputByName("_corevcc_WAR_vcc_1");
+        final HtmlTextInput toTextBox = confirmationForm.getInputByName("_corevcc_WAR_vcc_2");
+        final HtmlSubmitInput continueButton = confirmationForm.getInputByName("_corevcc_WAR_vcc_3.9.1");
+
+        fromTextBox.setDefaultValue(from);
+        toTextBox.setDefaultValue(to);
+
+        HtmlPage orderOverviewPage = continueButton.click();
+
+        sleep(2);
+
+        TMobileServerResponse response = confirmOrder( orderOverviewPage );
+        return response;
+    }
+
+    /**
+     * Method for order confirmation
+     * @param orderOverviewPage
+     * @return TMobileServerResponse
+     * @throws IOException
+     */
+    private TMobileServerResponse confirmOrder(HtmlPage orderOverviewPage) throws IOException {
+
+        if ( ! orderOverviewPage.asText().contains("Přehled objednávky"))
+            return TMobileServerResponse.ACTIVATION_FAILED_WRONG_SUBMIT_PAGE;
+
+        List<HtmlForm> orderOverviewForms = orderOverviewPage.getForms();
+        final HtmlForm orderOverviewForm = orderOverviewForms.get(2); // 3rd on the page
+        final HtmlSubmitInput submitButton = orderOverviewForm .getInputByName("_corevcc_WAR_vcc_submit_form");
+
+        HtmlPage lastPage = submitButton.click();
+
+        sleep(2);
+
+        if ( ! lastPage.asText().contains("Děkujeme. Úspěšně jsme přijali vaši objednávku."))
+            return TMobileServerResponse.ACTIVATION_FAILED_CONFIRMATION_FAILED;
+
+        return TMobileServerResponse.ACTIVATION_SUCCESSFUL;
+    }
+
 
     /**
      * Submethod to methods, whose task is activation of a service
@@ -179,7 +308,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @param serviceName = name of the service
      * @throws IOException
      */
-    private boolean serviceActivation(HtmlTable table, String serviceName) throws IOException {
+    private HtmlPage serviceActivation(HtmlTable table, String serviceName, boolean activation) throws IOException, ServiceAlreadyActivatedException {
 
         for (HtmlTableRow tableRow : table.getRows()) {
             //System.out.println("tableRow: " + tableRow.asText());
@@ -188,44 +317,28 @@ public class TMobileService implements TMobileServiceInterface {
 
             if (tableRow.getCell(0).asText().equals(serviceName)) {
                 System.out.println(tableRow.getCell(0).asText() + " - " + tableRow.getElementsByTagName("a").get(0).asText());
-                tableRow.getElementsByTagName("a").get(0).click();
-                System.out.println("Activation successful");
-                return true;
+
+                HtmlElement button = tableRow.getElementsByTagName("a").get(0);
+                if ((! button.asText().contains("Aktivovat") && activation )
+                        || (! button.asText().contains("Zrušit") && ! activation ))
+                    throw new ServiceAlreadyActivatedException();
+
+                HtmlPage confirmationPage = button.click();
+
+                sleep(5);
+                return confirmationPage;
             }
         }
-        return false;
+        return null;
     }
 
-     /*
-      |=================================================================================================================
-      | LOGIN METHODS
-      |=================================================================================================================
-     */
-
-    /**
-     * Easy submethod of method login.
-     *
-     * @return server response if connection succeeded or not.
-     */
-    private TMobileServerResponse getResponse() {
-        if (mainPage.asText().contains("Kód chyby: G 706")) {
-            System.out.println("INVALID_USERNAME_OR_PASSWORD");
-            return TMobileServerResponse.INVALID_USERNAME_OR_PASSWORD;
-        }
-
-        if (mainPage.asText().contains("Kód chyby: G 701")) {
-            System.out.println("LOCKED_ACCOUNT");
-            return TMobileServerResponse.LOCKED_ACCOUNT;
-        }
-
-        if (mainPage.asText().contains("Vítejte v Můj T-Mobile") || mainPage.asText().contains("Bleskový přehled")) {
-            System.out.println("LOGIN_SUCCESSFUL");
-            return TMobileServerResponse.LOGIN_SUCCESSFUL;
-        }
-
-        System.out.println("SERVER_CONNECTION_FAILED - Unknown failure");
-        return TMobileServerResponse.SERVER_CONNECTION_FAILED;
+    private HtmlPage serviceActivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
+        return serviceActivation(table, serviceName, true);
     }
+    private HtmlPage serviceDeactivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
+        return serviceActivation(table, serviceName, false);
+    }
+
 
      /*
       |=================================================================================================================
@@ -244,34 +357,92 @@ public class TMobileService implements TMobileServiceInterface {
      * @throws LogoutException
      * @throws UnknownNumberException
      */
-    private HtmlPage travelToPage(String phoneNumber, String name, long seconds) throws IOException, LogoutException, UnknownNumberException {
+    private HtmlPage getPageByName(String phoneNumber, String name, long seconds) throws IOException, LogoutException, UnknownNumberException {
         overviewPage = mainPage;
         /*
         if ( isFirst ){
-            overviewPage = overviewPage (phoneNumber);
+            getOverviewPage = getOverviewPage (phoneNumber);
             isFirst = false;
         }
         */
 
         overviewPage = openSideNav(overviewPage);
-        System.out.println("sidenav: " + overviewPage.asText());
+        //System.out.println("sidenav: " + overviewPage.asText());
 
-        HtmlPage page = nextPage(overviewPage, name);
+        HtmlPage finalPage = nextPage(overviewPage, name);
 
         sleep(seconds);
 
-        System.out.println("Final page: \n" + page.asText());
+        System.out.println("Final page: \n" + finalPage.asText());
 
+        return finalPage;
+    }
+
+    /**
+     * Open side-nav bar, where Nastavení služeb & Můj tarif are
+     *
+     * @param page
+     * @return
+     * @throws IOException
+     */
+    private HtmlPage openSideNav(HtmlPage page) throws IOException {
+        DomNodeList<HtmlElement> tmpElements = page.getElementById("side-nav").getElementsByTagName("a");
+        for (HtmlElement element : tmpElements) {
+            if (element.asText().equals("Služby")) {
+                element.click();
+                System.out.println("SIDE-NAV SUCCESS");
+                break;
+            }
+        }
         return page;
     }
 
+    /**
+     * This method transfers your method from Bleskovy prehled (getOverviewPage) to final page of your choice
+     *
+     * @param overviewPage = Bleskovy prehled page
+     * @param name         = name of destination
+     * @return final @param name's page
+     * @throws IOException
+     */
+    private HtmlPage nextPage(HtmlPage overviewPage, String name) throws IOException {
+        List<HtmlAnchor> anchors = overviewPage.getAnchors();
+
+        HtmlAnchor link = anchors.get(0);
+        for (HtmlAnchor anchor : anchors) {
+            if (anchor.asText().equals(name)) {
+                link = anchor;
+                System.out.println("Anchor found! " + anchor.asText());
+                break;
+            }
+        }
+        return link.click();
+    }
+
+    /**
+     * Because of loading pages.
+     * @param seconds
+     */
+    private void sleep(long seconds) {
+        try {
+            Thread.sleep(seconds * 1000);
+        } catch (Exception e) {
+        }
+    }
+
+
+    /*
+      |=================================================================================================================
+      | UNUSED FUNCTIONS
+      |=================================================================================================================
+     */
     /**
      * This method transfers your method from Muj T-Mobile main page to Bleskovy prehled of @param phoneNumber
      *
      * @return returns HtmlPage of Bleskovy prehled phoneNumber
      * @throws IOException
      */
-    private HtmlPage overviewPage(String phoneNumber) throws IOException, LogoutException, UnknownNumberException {
+    private HtmlPage getOverviewPage(String phoneNumber) throws IOException, LogoutException, UnknownNumberException {
 
         if (!mainPage.asText().contains("Vítejte v Můj T-Mobile"))
             throw new LogoutException("You have to log in first");
@@ -282,9 +453,12 @@ public class TMobileService implements TMobileServiceInterface {
 
         textInput.type(phoneNumber);
         HtmlPage tmpPage = findButton.click();
+
         sleep(6);
 
-        return findPhoneNumberPage(tmpPage, phoneNumber);
+        HtmlPage phoneNumberPage = findPhoneNumberPage(tmpPage, phoneNumber);
+
+        return phoneNumberPage;
     }
 
     /**
@@ -309,61 +483,9 @@ public class TMobileService implements TMobileServiceInterface {
                 }
             }
         }
+
         System.out.println("Unknown number");
         throw new UnknownNumberException("UNKNOWN NUMBER");
-
     }
 
-    /**
-     * Open side-nav bar, where Nastavení služeb & Můj tarif are
-     *
-     * @param page
-     * @return
-     * @throws IOException
-     */
-    private HtmlPage openSideNav(HtmlPage page) throws IOException {
-        DomNodeList<HtmlElement> tmpElements = page.getElementById("side-nav").getElementsByTagName("a");
-        for (HtmlElement element : tmpElements) {
-            if (element.asText().equals("Služby")) {
-                element.click();
-                System.out.println("SIDE-NAV SUCCESS");
-                break;
-            }
-        }
-        return page;
-    }
-
-    /**
-     * This method transfers your method from Bleskovy prehled (overviewPage) to final page of your choice
-     *
-     * @param overviewPage = Bleskovy prehled page
-     * @param name         = name of destination
-     * @return final @param name's page
-     * @throws IOException
-     */
-    private HtmlPage nextPage(HtmlPage overviewPage, String name) throws IOException {
-        List<HtmlAnchor> anchors = overviewPage.getAnchors();
-
-        HtmlAnchor link = null;
-        for (HtmlAnchor anchor : anchors) {
-            if (anchor.asText().equals(name)) {
-                link = anchor;
-                System.out.println("Anchor found! " + anchor.asText());
-                break;
-            }
-        }
-        return link.click();
-    }
-
-    /*
-      |=================================================================================================================
-      | SLEEP
-      |=================================================================================================================
-     */
-    private void sleep(long seconds) {
-        try {
-            Thread.sleep(seconds * 1000);
-        } catch (Exception e) {
-        }
-    }
 }

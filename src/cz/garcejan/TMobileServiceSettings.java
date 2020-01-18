@@ -16,10 +16,10 @@ public class TMobileServiceSettings extends TMobilePageAbstract {
         }
     }
 
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("TMobileServiceSettings{");
-
 
         for (String key : data.keySet()) {
             for (TMobileData x : data.get(key)) {

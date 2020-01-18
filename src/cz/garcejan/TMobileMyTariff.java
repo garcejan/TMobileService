@@ -35,21 +35,6 @@ public class TMobileMyTariff extends TMobilePageAbstract {
         int pos1 = tableRow.getCell(1).asText().indexOf("\n");
         String b = tableRow.getCell(1).asText().substring(0, pos1);
         myTariff = new Pair<>(a, b);
-
-/*
-        int controlCells = 0;
-        String tmpCell = "";
-
-        for ( HtmlTableCell tableCell : tableRow.getCells() ){
-            if ( controlCells == 1) {
-                myTariff = new Pair<>( tmpCell, tableCell.asText());
-                break;
-            }
-            ++controlCells;
-            tmpCell = tableCell.asText();
-        }
-*/
-
     }
 
     public void saveDataFromTables(List<HtmlTable> tables) throws InvalidTableException {
