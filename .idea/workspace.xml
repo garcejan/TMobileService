@@ -8,6 +8,12 @@
   <component name="ChangeListManager">
     <list default="true" id="5723f16e-72dd-4987-a6e0-a44e17d49376" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/artifacts/tmobile_jar/tmobile.jar" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/tmobile_jar/tmobile.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobilePageAbstract.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobilePageAbstract.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileServerResponse.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileServerResponse.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileServiceInterface.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/tmobile/cz/garcejan/TMobileServiceInterface.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cz/garcejan/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/garcejan/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cz/garcejan/TMobileServerResponse.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/cz/garcejan/TMobileServerResponse.java" afterDir="false" />
@@ -29,8 +35,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1088">
-              <caret line="295" selection-start-line="295" selection-end-line="295" />
+            <state relative-caret-position="-1923">
+              <caret line="294" selection-start-line="294" selection-end-line="294" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#getServerResponse#0;class#TMobileService#0" />
@@ -42,42 +48,6 @@
                 <element signature="method#overviewPage#0;class#TMobileService#0" />
                 <element signature="method#findPhoneNumberPage#0;class#TMobileService#0" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/garcejan/Main.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="111">
-              <caret line="210" column="90" selection-start-line="210" selection-start-column="90" selection-end-line="210" selection-end-column="90" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="method#loginTests#0;class#Main#0" />
-                <element signature="method#myTariffTests#0;class#Main#0" />
-                <element signature="method#serviceSettingsTests#0;class#Main#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServiceInterface.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="82" column="50" selection-start-line="82" selection-start-column="50" selection-end-line="82" selection-end-column="50" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServerResponse.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="17" selection-start-line="14" selection-start-column="17" selection-end-line="14" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -97,7 +67,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>isFirst</find>
       <find>nextPage</find>
       <find>finalPage</find>
       <find>page</find>
@@ -124,9 +93,10 @@
       <find>changeServiceState</find>
       <find>F</find>
       <find>serviceActivation</find>
-      <find>gar</find>
       <find>getPageByName</find>
       <find>Anchor f</find>
+      <find>matches</find>
+      <find>gar</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -157,11 +127,11 @@
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileServiceSettings.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileExceptions/ServiceActivationFailedException.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileExceptions/ServiceAlreadyActivatedException.java" />
-        <option value="$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileServerResponse.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileServiceTest.java" />
-        <option value="$PROJECT_DIR$/src/cz/garcejan/Main.java" />
+        <option value="$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileServiceInterface.java" />
+        <option value="$PROJECT_DIR$/src/cz/garcejan/Main.java" />
         <option value="$PROJECT_DIR$/src/cz/garcejan/TMobileService.java" />
       </list>
     </option>
@@ -184,24 +154,6 @@
             <path>
               <item name="tmobile" type="b2602c69:ProjectViewProjectNode" />
               <item name="tmobile" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tmobile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tmobile" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tmobile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tmobile" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="tmobile" type="b2602c69:ProjectViewProjectNode" />
-              <item name="tmobile" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-              <item name="artifacts" type="462c0819:PsiDirectoryNode" />
-              <item name="tmobile_jar" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="tmobile" type="b2602c69:ProjectViewProjectNode" />
@@ -292,12 +244,12 @@
       <workItem from="1565702171905" duration="35692000" />
       <workItem from="1577460111689" duration="10467000" />
       <workItem from="1577990864779" duration="1700000" />
-      <workItem from="1579267732245" duration="25338000" />
+      <workItem from="1579267732245" duration="25586000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177920000" />
+    <option name="totallyTimeSpent" value="178168000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -426,40 +378,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileMyTariff.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="23" column="79" selection-start-line="23" selection-start-column="79" selection-end-line="23" selection-end-column="79" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#setMyTariff#0;class#TMobileMyTariff#0" />
-            <element signature="method#saveDataFromTables#0;class#TMobileMyTariff#0" />
-            <element signature="method#toString#0;class#TMobileMyTariff#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServiceSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="270">
-          <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
-          <folding>
-            <element signature="method#TMobileData#0;class#TMobileData#0" />
-            <element signature="method#toString#0;class#TMobileData#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileExceptions/ServiceAlreadyActivatedException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -478,18 +396,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="521">
-          <caret line="81" column="11" selection-start-line="81" selection-start-column="11" selection-end-line="81" selection-end-column="11" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#parsePrice#0;class#TMobilePageAbstract#0" />
-            <element signature="e#3713#3714#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServiceTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
@@ -497,15 +403,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileData.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="111">
-          <caret line="210" column="90" selection-start-line="210" selection-start-column="90" selection-end-line="210" selection-end-column="90" />
+        <state relative-caret-position="150">
+          <caret line="10" column="49" selection-start-line="10" selection-start-column="49" selection-end-line="10" selection-end-column="49" />
+          <folding>
+            <element signature="method#TMobileData#0;class#TMobileData#0" />
+            <element signature="method#toString#0;class#TMobileData#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileMyTariff.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="23" column="79" selection-start-line="23" selection-start-column="79" selection-end-line="23" selection-end-column="79" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="method#loginTests#0;class#Main#0" />
-            <element signature="method#myTariffTests#0;class#Main#0" />
-            <element signature="method#serviceSettingsTests#0;class#Main#0" />
+            <element signature="method#setMyTariff#0;class#TMobileMyTariff#0" />
+            <element signature="method#saveDataFromTables#0;class#TMobileMyTariff#0" />
+            <element signature="method#toString#0;class#TMobileMyTariff#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobilePageAbstract.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="6" lean-forward="true" selection-start-line="23" selection-start-column="6" selection-end-line="23" selection-end-column="6" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#parsePrice#0;class#TMobilePageAbstract#0" />
+            <element signature="e#3686#3687#0" expanded="true" />
+            <element signature="e#3713#3714#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -519,18 +449,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServiceInterface.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="82" column="50" selection-start-line="82" selection-start-column="50" selection-end-line="82" selection-end-column="50" />
+        <state relative-caret-position="549">
+          <caret line="88" column="50" selection-start-line="88" selection-start-column="50" selection-end-line="88" selection-end-column="50" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileServiceSettings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" selection-start-line="18" selection-end-line="18" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cz/garcejan/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="204" column="90" selection-start-line="204" selection-start-column="90" selection-end-line="204" selection-end-column="90" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#loginTests#0;class#Main#0" />
+            <element signature="method#myTariffTests#0;class#Main#0" />
+            <element signature="method#serviceSettingsTests#0;class#Main#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/cz/garcejan/TMobileService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1088">
-          <caret line="295" selection-start-line="295" selection-end-line="295" />
+        <state relative-caret-position="-1923">
+          <caret line="294" selection-start-line="294" selection-end-line="294" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="method#getServerResponse#0;class#TMobileService#0" />

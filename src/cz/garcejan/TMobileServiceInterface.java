@@ -49,8 +49,8 @@ public interface TMobileServiceInterface {
      * But first you have to use method TMobileServiceInterFace.login to sign up.
      * Doesn't work, if you used any other methods with different phoneNumber before. (T-Mobile server problem)
      *
-     * @return TMobileServerResponse
      * @param phoneNumber
+     * @return TMobileServerResponse
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
@@ -63,18 +63,24 @@ public interface TMobileServiceInterface {
      * But first you have to use method TMobileServiceInterFace.login to sign up.
      * Doesn't work, if you used any other methods with different phoneNumber before. (T-Mobile server problem)
      *
-     * @return TMobileServerResponse
      * @param phoneNumber
-     * @param from: MUST be in format dd.MM.yyyy and >= today's date
-     * @param to: MUST be in format dd.MM.yyyy and >= @param from
+     * @param from:       MUST be in format dd.MM.yyyy and >= today's date
+     * @param to:         MUST be in format dd.MM.yyyy and >= @param from
+     * @return TMobileServerResponse
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
      */
     TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
-    /** Set holiday suspending from today to @param to */
+
+    /**
+     * Set holiday suspending from today to @param to
+     */
     TMobileServerResponse holidaySuspending(String phoneNumber, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
-    /** Set holiday suspending for a week from today */
+
+    /**
+     * Set holiday suspending for a week from today
+     */
     TMobileServerResponse holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
 
     /**

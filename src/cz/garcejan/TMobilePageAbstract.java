@@ -72,14 +72,16 @@ public abstract class TMobilePageAbstract {
 
         //service is enabled
         boolean enabled = true;
-/*
+
+        /*
         //bubble bubble-top bubble-red a bubble bubble-top bubble-green //div[contains(@class, 'date')]
          List<HtmlElement> elements = tableRow.getCell(2).getByXPath("/tr/td/div[contains(@class, 'bubble-red')]");
-        System.out.println(  tableRow.getCell(2).asText() + " cellxxx " + tableRow.getCell(2));
+        System.out.println(  tableRow.getCell(2).asText() + " : " + tableRow.getCell(2));
         if ( elements.size() > 0){
             System.out.println("element size" + elements.size());
             enabled = false;
         }*/
+
         if (tableRow.getCell(4).asText().contains("Aktivovat")
                 || tableRow.getCell(4).asText().contains("Odblokovat")) {
             enabled = false;

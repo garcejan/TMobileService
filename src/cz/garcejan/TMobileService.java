@@ -26,6 +26,7 @@ public class TMobileService implements TMobileServiceInterface {
       | LOGIN
       |=================================================================================================================
      */
+
     /**
      * This method connects to your T-Mobile account.
      *
@@ -168,7 +169,7 @@ public class TMobileService implements TMobileServiceInterface {
     /**
      * Info in TMobileServiceInterface
      */
-    public TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
+    public TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
         System.out.println("Reset data roaming limit");
 
         HtmlPage foreignPage = getPageByName(phoneNumber, "Zahraničí", 10);
@@ -187,11 +188,10 @@ public class TMobileService implements TMobileServiceInterface {
                     return TMobileServerResponse.SERVICE_ALREADY_ACTIVATED;
                 }
 
-                if ( page != null ){
+                if (page != null) {
                     System.out.println("Restart data roaming limit successful");
                     return TMobileServerResponse.TASK_SUCCESSFUL;
-                }
-                else throw new NullPointerException();
+                } else throw new NullPointerException();
             }
         }
 
@@ -201,7 +201,7 @@ public class TMobileService implements TMobileServiceInterface {
     /**
      * Info in TMobileServiceInterface
      */
-    public TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
+    public TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
         System.out.println("Holiday suspending");
 
         HtmlPage serviceSettingsPage = getPageByName(phoneNumber, "Nastavení služeb", 10);
@@ -217,15 +217,14 @@ public class TMobileService implements TMobileServiceInterface {
 
                 try {
                     confirmationPage = serviceActivation(table, "Suspendace - Prázdniny");
-                } catch (ServiceAlreadyActivatedException e){
+                } catch (ServiceAlreadyActivatedException e) {
                     return TMobileServerResponse.SERVICE_ALREADY_ACTIVATED;
                 }
 
-                if ( confirmationPage != null ){
+                if (confirmationPage != null) {
                     TMobileServerResponse confirmResponse = confirmHolidaySuspending(confirmationPage, from, to);
                     return confirmResponse;
-                }
-                else throw new NullPointerException();
+                } else throw new NullPointerException();
 
             }
         }
@@ -262,11 +261,10 @@ public class TMobileService implements TMobileServiceInterface {
                     return TMobileServerResponse.SERVICE_ALREADY_DEACTIVATED;
                 }
 
-                if ( confirmationPage != null ){
-                    TMobileServerResponse confirmResponse = confirmOrder( confirmationPage );
+                if (confirmationPage != null) {
+                    TMobileServerResponse confirmResponse = confirmOrder(confirmationPage);
                     return confirmResponse;
-                }
-                else throw new NullPointerException();
+                } else throw new NullPointerException();
 
             }
         }
@@ -276,9 +274,10 @@ public class TMobileService implements TMobileServiceInterface {
 
     /**
      * Submethod for holidaySuspending. Fill in dates from/to for suspending.
+     *
      * @param confirmationPage
-     * @param from: MUST be in format dd.MM.yyyy and >= today's date
-     * @param to: MUST be in format dd.MM.yyyy and >= @param from
+     * @param from:            MUST be in format dd.MM.yyyy and >= today's date
+     * @param to:              MUST be in format dd.MM.yyyy and >= @param from
      * @return TMobileServerResponse
      * @throws IOException
      */
@@ -290,42 +289,42 @@ public class TMobileService implements TMobileServiceInterface {
         final HtmlTextInput toTextBox = confirmationForm.getInputByName("_corevcc_WAR_vcc_2");
         final HtmlSubmitInput continueButton = confirmationForm.getInputByName("_corevcc_WAR_vcc_3.9.1");
 
-        if ( from.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]") )
+        if (from.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]"))
             fromTextBox.setDefaultValue(from);
 
-        if ( to.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]"))
+        if (to.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]"))
             toTextBox.setDefaultValue(to);
 
         HtmlPage orderOverviewPage = continueButton.click();
 
         sleep(2);
 
-        TMobileServerResponse response = confirmOrder( orderOverviewPage );
+        TMobileServerResponse response = confirmOrder(orderOverviewPage);
         return response;
     }
 
 
-
     /**
      * Method for confirmation order form.
+     *
      * @param orderOverviewPage
      * @return TMobileServerResponse
      * @throws IOException
      */
     private TMobileServerResponse confirmOrder(HtmlPage orderOverviewPage) throws IOException {
 
-        if ( ! orderOverviewPage.asText().contains("Přehled objednávky"))
+        if (!orderOverviewPage.asText().contains("Přehled objednávky"))
             return TMobileServerResponse.TASK_FAILED_WRONG_SUBMIT_PAGE;
 
         List<HtmlForm> orderOverviewForms = orderOverviewPage.getForms();
         final HtmlForm orderOverviewForm = orderOverviewForms.get(2); // 3rd on the page
-        final HtmlSubmitInput submitButton = orderOverviewForm .getInputByName("_corevcc_WAR_vcc_submit_form");
+        final HtmlSubmitInput submitButton = orderOverviewForm.getInputByName("_corevcc_WAR_vcc_submit_form");
 
         HtmlPage lastPage = submitButton.click();
 
         sleep(2);
 
-        if ( ! lastPage.asText().contains("Děkujeme. Úspěšně jsme přijali vaši objednávku."))
+        if (!lastPage.asText().contains("Děkujeme. Úspěšně jsme přijali vaši objednávku."))
             return TMobileServerResponse.TASK_CONFIRMATION_FAILED;
 
         return TMobileServerResponse.TASK_SUCCESSFUL;
@@ -350,8 +349,8 @@ public class TMobileService implements TMobileServiceInterface {
                 System.out.println(tableRow.getCell(0).asText() + " - " + tableRow.getElementsByTagName("a").get(0).asText());
 
                 HtmlElement button = tableRow.getElementsByTagName("a").get(0);
-                if ((! button.asText().contains("Aktivovat") && activation )
-                        || (! button.asText().contains("Zrušit") && ! activation ))
+                if ((!button.asText().contains("Aktivovat") && activation)
+                        || (!button.asText().contains("Zrušit") && !activation))
                     throw new ServiceAlreadyActivatedException();
 
                 HtmlPage confirmationPage = button.click();
@@ -366,6 +365,7 @@ public class TMobileService implements TMobileServiceInterface {
     private HtmlPage serviceActivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
         return changeServiceState(table, serviceName, true);
     }
+
     private HtmlPage serviceDeactivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
         return changeServiceState(table, serviceName, false);
     }
@@ -452,6 +452,7 @@ public class TMobileService implements TMobileServiceInterface {
 
     /**
      * Because of loading pages.
+     *
      * @param seconds
      */
     private void sleep(long seconds) {
@@ -467,6 +468,7 @@ public class TMobileService implements TMobileServiceInterface {
       | UNUSED FUNCTIONS
       |=================================================================================================================
      */
+
     /**
      * This method transfers your method from Muj T-Mobile main page to Bleskovy prehled of @param phoneNumber
      *
