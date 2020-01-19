@@ -3,7 +3,6 @@ package cz.garcejan;
 import java.util.Map;
 
 import static java.lang.System.exit;
-import static java.lang.System.setOut;
 
 public class Main {
 
@@ -156,7 +155,7 @@ public class Main {
         // test1
         try{
             TMobileService test1 = new TMobileService();
-            if ( ! test1.login("1105092013", "Strancice54").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
+            if ( ! test1.login("1105092013", "xxx").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test1 failed");
 
             TMobileServiceSettings tMobileServiceSettings = test1.getServiceSettings("twehagh");
@@ -205,17 +204,17 @@ public class Main {
             if ( ! test0.login("1105092013", "tmcz-97Ahp93k").equals( TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test0 failed");
 
-            if (test0.resetDataRoamingLimit("") != TMobileServerResponse.ACTIVATION_SUCCESSFUL){
+            if (test0.resetDataRoamingLimit("") != TMobileServerResponse.TASK_SUCCESSFUL){
                 exit(5);
             }
             System.out.println("============================================================================================================");
-            TMobileServerResponse response = test0.holidaySuspending("", "18.1.2020", "18.1.2020");
-            if ( response != TMobileServerResponse.ACTIVATION_SUCCESSFUL){
+            TMobileServerResponse response = test0.holidaySuspending("", "22.1.2020", "22.1.2020");
+            if ( response != TMobileServerResponse.TASK_SUCCESSFUL){
                 System.out.println(response);
                 exit(1);
             }
             System.out.println("============================================================================================================");
-            if (test0.resetDataRoamingLimit("") != TMobileServerResponse.ACTIVATION_SUCCESSFUL){
+            if (test0.resetDataRoamingLimit("") != TMobileServerResponse.TASK_SUCCESSFUL){
                 exit(2);
             }
         }
@@ -273,8 +272,8 @@ public class Main {
         try {
             //loginTests();
             //myTariffTests();
-            serviceSettingsTests();
-            //activationTests();
+            //serviceSettingsTests();
+            activationTests();
             //tests();
 
         } catch (Exception e) {

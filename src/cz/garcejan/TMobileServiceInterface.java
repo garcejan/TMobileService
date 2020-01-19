@@ -29,7 +29,7 @@ public interface TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException;
+    TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException;
 
     /**
      * You have to use login(String username, String password ) first to sign up.
@@ -42,7 +42,7 @@ public interface TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException;
+    TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException;
 
     /**
      * This method resets your phoneNumber data roaming limit.
@@ -55,7 +55,7 @@ public interface TMobileServiceInterface {
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
      */
-    TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException;
+    TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
 
 
     /**
@@ -72,9 +72,16 @@ public interface TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      */
     TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    /** Set holiday suspending from today to @param to */
+    TMobileServerResponse holidaySuspending(String phoneNumber, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    /** Set holiday suspending for a week from today */
+    TMobileServerResponse holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
 
     /**
      * This method deactivates phoneNumber holiday suspending.
+     * But first you have to use method TMobileServiceInterFace.login to sign up.
+     * Doesn't work, if you used any other methods with different phoneNumber before. (T-Mobile server problem)
+     *
      * @param phoneNumber
      * @return TMobileServerResponse
      * @throws UnknownNumberException

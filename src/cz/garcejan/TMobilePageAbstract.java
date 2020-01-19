@@ -80,7 +80,6 @@ public abstract class TMobilePageAbstract {
             System.out.println("element size" + elements.size());
             enabled = false;
         }*/
-
         if (tableRow.getCell(4).asText().contains("Aktivovat")
                 || tableRow.getCell(4).asText().contains("Odblokovat")) {
             enabled = false;

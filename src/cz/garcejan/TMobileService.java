@@ -18,6 +18,7 @@ public class TMobileService implements TMobileServiceInterface {
     private HtmlPage mainPage;
     private HtmlPage overviewPage; //overview page of the phone number you choose
 
+    // uncomment this, if account owns more phoneNumbers
     // private boolean isFirst = true; //check if public methods have already been used or not, only for overviewPage
 
     /*
@@ -41,7 +42,6 @@ public class TMobileService implements TMobileServiceInterface {
             webClient.getOptions().setThrowExceptionOnScriptError(false);
 
             final HtmlPage defaultPage = webClient.getPage(url);
-            //https://stackoverflow.com/questions/11249317/error-while-using-htmlunit
 
             // this form hasn't got id, neither name, so it has to be chosen by brute force
             // it's 3rd on this page
@@ -121,7 +121,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    public TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException {
+    public TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException {
 
         System.out.println("My tariff");
         TMobileMyTariff tMobileMyTariff = new TMobileMyTariff();
@@ -145,7 +145,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    public TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException {
+    public TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException {
 
         System.out.println("Service settings");
         TMobileServiceSettings serviceSettings = new TMobileServiceSettings();
@@ -163,6 +163,10 @@ public class TMobileService implements TMobileServiceInterface {
       |=================================================================================================================
       | ACTIVATION METHODS
       |=================================================================================================================
+     */
+
+    /**
+     * Info in TMobileServiceInterface
      */
     public TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
         System.out.println("Reset data roaming limit");
@@ -185,7 +189,7 @@ public class TMobileService implements TMobileServiceInterface {
 
                 if ( page != null ){
                     System.out.println("Restart data roaming limit successful");
-                    return TMobileServerResponse.ACTIVATION_SUCCESSFUL;
+                    return TMobileServerResponse.TASK_SUCCESSFUL;
                 }
                 else throw new NullPointerException();
             }
@@ -194,7 +198,9 @@ public class TMobileService implements TMobileServiceInterface {
         return TMobileServerResponse.ACTIVATION_FAILED;
     }
 
-    //TODO test
+    /**
+     * Info in TMobileServiceInterface
+     */
     public TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException{
         System.out.println("Holiday suspending");
 
@@ -227,6 +233,18 @@ public class TMobileService implements TMobileServiceInterface {
         return TMobileServerResponse.ACTIVATION_FAILED;
     }
 
+    public TMobileServerResponse holidaySuspending(String phoneNumber, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
+        return holidaySuspending(phoneNumber, "", to);
+    }
+
+    public TMobileServerResponse holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
+        return holidaySuspending(phoneNumber, "", "");
+    }
+
+
+    /**
+     * Info in TMobileServiceInterface
+     */
     public TMobileServerResponse deactivateHolidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException {
         System.out.println("Deactivate holiday suspending");
 
@@ -245,7 +263,7 @@ public class TMobileService implements TMobileServiceInterface {
                 }
 
                 if ( confirmationPage != null ){
-                    TMobileServerResponse confirmResponse = confirmOrder( confirmationPage ); // TODO VRACI SPATNY RESPONSE
+                    TMobileServerResponse confirmResponse = confirmOrder( confirmationPage );
                     return confirmResponse;
                 }
                 else throw new NullPointerException();
@@ -256,6 +274,14 @@ public class TMobileService implements TMobileServiceInterface {
         return TMobileServerResponse.DEACTIVATION_FAILED;
     }
 
+    /**
+     * Submethod for holidaySuspending. Fill in dates from/to for suspending.
+     * @param confirmationPage
+     * @param from: MUST be in format dd.MM.yyyy and >= today's date
+     * @param to: MUST be in format dd.MM.yyyy and >= @param from
+     * @return TMobileServerResponse
+     * @throws IOException
+     */
     private TMobileServerResponse confirmHolidaySuspending(HtmlPage confirmationPage, String from, String to) throws IOException {
 
         List<HtmlForm> forms = confirmationPage.getForms();
@@ -264,8 +290,11 @@ public class TMobileService implements TMobileServiceInterface {
         final HtmlTextInput toTextBox = confirmationForm.getInputByName("_corevcc_WAR_vcc_2");
         final HtmlSubmitInput continueButton = confirmationForm.getInputByName("_corevcc_WAR_vcc_3.9.1");
 
-        fromTextBox.setDefaultValue(from);
-        toTextBox.setDefaultValue(to);
+        if ( from.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]") )
+            fromTextBox.setDefaultValue(from);
+
+        if ( to.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]"))
+            toTextBox.setDefaultValue(to);
 
         HtmlPage orderOverviewPage = continueButton.click();
 
@@ -275,8 +304,10 @@ public class TMobileService implements TMobileServiceInterface {
         return response;
     }
 
+
+
     /**
-     * Method for order confirmation
+     * Method for confirmation order form.
      * @param orderOverviewPage
      * @return TMobileServerResponse
      * @throws IOException
@@ -284,7 +315,7 @@ public class TMobileService implements TMobileServiceInterface {
     private TMobileServerResponse confirmOrder(HtmlPage orderOverviewPage) throws IOException {
 
         if ( ! orderOverviewPage.asText().contains("Přehled objednávky"))
-            return TMobileServerResponse.ACTIVATION_FAILED_WRONG_SUBMIT_PAGE;
+            return TMobileServerResponse.TASK_FAILED_WRONG_SUBMIT_PAGE;
 
         List<HtmlForm> orderOverviewForms = orderOverviewPage.getForms();
         final HtmlForm orderOverviewForm = orderOverviewForms.get(2); // 3rd on the page
@@ -295,9 +326,9 @@ public class TMobileService implements TMobileServiceInterface {
         sleep(2);
 
         if ( ! lastPage.asText().contains("Děkujeme. Úspěšně jsme přijali vaši objednávku."))
-            return TMobileServerResponse.ACTIVATION_FAILED_CONFIRMATION_FAILED;
+            return TMobileServerResponse.TASK_CONFIRMATION_FAILED;
 
-        return TMobileServerResponse.ACTIVATION_SUCCESSFUL;
+        return TMobileServerResponse.TASK_SUCCESSFUL;
     }
 
 
@@ -308,7 +339,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @param serviceName = name of the service
      * @throws IOException
      */
-    private HtmlPage serviceActivation(HtmlTable table, String serviceName, boolean activation) throws IOException, ServiceAlreadyActivatedException {
+    private HtmlPage changeServiceState(HtmlTable table, String serviceName, boolean activation) throws IOException, ServiceAlreadyActivatedException {
 
         for (HtmlTableRow tableRow : table.getRows()) {
             //System.out.println("tableRow: " + tableRow.asText());
@@ -333,12 +364,11 @@ public class TMobileService implements TMobileServiceInterface {
     }
 
     private HtmlPage serviceActivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
-        return serviceActivation(table, serviceName, true);
+        return changeServiceState(table, serviceName, true);
     }
     private HtmlPage serviceDeactivation(HtmlTable table, String serviceName) throws IOException, ServiceAlreadyActivatedException {
-        return serviceActivation(table, serviceName, false);
+        return changeServiceState(table, serviceName, false);
     }
-
 
      /*
       |=================================================================================================================
@@ -357,9 +387,10 @@ public class TMobileService implements TMobileServiceInterface {
      * @throws LogoutException
      * @throws UnknownNumberException
      */
-    private HtmlPage getPageByName(String phoneNumber, String name, long seconds) throws IOException, LogoutException, UnknownNumberException {
+    private HtmlPage getPageByName(String phoneNumber, String name, long seconds) throws IOException, LogoutException, UnknownNumberException, NullPointerException {
         overviewPage = mainPage;
         /*
+        // uncomment this, if account owns more phoneNumbers
         if ( isFirst ){
             getOverviewPage = getOverviewPage (phoneNumber);
             isFirst = false;
@@ -379,10 +410,10 @@ public class TMobileService implements TMobileServiceInterface {
     }
 
     /**
-     * Open side-nav bar, where Nastavení služeb & Můj tarif are
+     * Open side-nav bar
      *
      * @param page
-     * @return
+     * @return page with open side bar
      * @throws IOException
      */
     private HtmlPage openSideNav(HtmlPage page) throws IOException {
@@ -413,10 +444,10 @@ public class TMobileService implements TMobileServiceInterface {
             if (anchor.asText().equals(name)) {
                 link = anchor;
                 System.out.println("Anchor found! " + anchor.asText());
-                break;
+                return link.click();
             }
         }
-        return link.click();
+        return null;
     }
 
     /**
