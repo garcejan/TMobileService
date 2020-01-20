@@ -34,8 +34,6 @@ public class TMobileService implements TMobileServiceInterface {
     public TMobileServerResponse login(String username, String password) {
 
         try {
-            // web client to default page
-
             final WebClient webClient = new WebClient();
             webClient.getOptions().setThrowExceptionOnScriptError(false);
 
@@ -46,14 +44,11 @@ public class TMobileService implements TMobileServiceInterface {
             List<HtmlForm> forms = defaultPage.getForms();
             final HtmlForm loginForm = forms.get(2);
 
-            // getting inputs from form
             final HtmlTextInput textFieldUsername = loginForm.getInputByName("username");
             final HtmlPasswordInput textFieldPassword = loginForm.getInputByName("password");
             final HtmlCheckBoxInput checkBox = loginForm.getInputByName("remember");
             final HtmlSubmitInput submitButton = loginForm.getInputByName("submit");
 
-
-            // filling the sign up form and log in
             checkBox.setAttribute("checked", "checked");
             textFieldPassword.type(password);
             textFieldUsername.type(username);
@@ -104,7 +99,7 @@ public class TMobileService implements TMobileServiceInterface {
 
     /*
       |=================================================================================================================
-      | LOGIN END
+      | GET INFORMATION METHODS
       |=================================================================================================================
      */
 
@@ -177,7 +172,6 @@ public class TMobileService implements TMobileServiceInterface {
             if (table.getCaptionText().equals("Služby v roamingu")) {
                 System.out.println("Table " + table.getCaptionText() + " found!");
 
-
                 HtmlPage page = null;
                 try {
                     page = serviceActivation(table, "Data Roaming Limit - Reset");
@@ -204,9 +198,7 @@ public class TMobileService implements TMobileServiceInterface {
         HtmlPage serviceSettingsPage = getPageByName(phoneNumber, "Nastavení služeb", 10);
         List<HtmlTable> tables = serviceSettingsPage.getByXPath("/html/body//table");
 
-        System.out.println(serviceSettingsPage.asText());
         for (HtmlTable table : tables) {
-
             if (table.getCaptionText().equals("Pozastavení služeb")) {
                 System.out.println("Table " + table.getCaptionText() + " found!");
 
@@ -221,7 +213,8 @@ public class TMobileService implements TMobileServiceInterface {
                 if (confirmationPage != null) {
                     TMobileServerResponse confirmResponse = confirmHolidaySuspending(confirmationPage, from, to);
                     return confirmResponse;
-                } else throw new NullPointerException();
+                }
+                else throw new NullPointerException();
 
             }
         }
@@ -261,7 +254,8 @@ public class TMobileService implements TMobileServiceInterface {
                 if (confirmationPage != null) {
                     TMobileServerResponse confirmResponse = confirmOrder(confirmationPage);
                     return confirmResponse;
-                } else throw new NullPointerException();
+                }
+                else throw new NullPointerException();
 
             }
         }
@@ -286,10 +280,9 @@ public class TMobileService implements TMobileServiceInterface {
         final HtmlTextInput toTextBox = confirmationForm.getInputByName("_corevcc_WAR_vcc_2");
         final HtmlSubmitInput continueButton = confirmationForm.getInputByName("_corevcc_WAR_vcc_3.9.1");
 
-        //if (from.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]")) //not tested
+        //if (from.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]")) //better but not tested
         if (! from.equals(""))
             fromTextBox.setDefaultValue(from);
-
 
         //if (to.matches("[0-3]?[0-9]\\.[0-1]?[0-9]\\.20[2-9][0-9]")) //not tested
         if (! to.equals(""))
@@ -313,7 +306,7 @@ public class TMobileService implements TMobileServiceInterface {
      */
     private TMobileServerResponse confirmOrder(HtmlPage orderOverviewPage) throws IOException {
 
-        if (!orderOverviewPage.asText().contains("Přehled objednávky"))
+        if (! orderOverviewPage.asText().contains("Přehled objednávky"))
             return TMobileServerResponse.TASK_FAILED_WRONG_SUBMIT_PAGE;
 
         List<HtmlForm> orderOverviewForms = orderOverviewPage.getForms();
@@ -341,14 +334,13 @@ public class TMobileService implements TMobileServiceInterface {
     private HtmlPage changeServiceState(HtmlTable table, String serviceName, boolean activation) throws IOException, ServiceAlreadyActivatedException, TargetPageNotFoundException {
 
         for (HtmlTableRow tableRow : table.getRows()) {
-            //System.out.println("tableRow: " + tableRow.asText());
             if (tableRow.getCells().size() != 5)
                 continue;
 
             if (tableRow.getCell(0).asText().equals(serviceName)) {
                 System.out.println(tableRow.getCell(0).asText() + " - " + tableRow.getElementsByTagName("a").get(0).asText());
-
                 HtmlElement button = tableRow.getElementsByTagName("a").get(0);
+
                 if ((!button.asText().contains("Aktivovat") && activation)
                         || (!button.asText().contains("Zrušit") && !activation))
                     throw new ServiceAlreadyActivatedException();
@@ -359,6 +351,7 @@ public class TMobileService implements TMobileServiceInterface {
                 return confirmationPage;
             }
         }
+
         throw new TargetPageNotFoundException();
     }
 
@@ -388,9 +381,11 @@ public class TMobileService implements TMobileServiceInterface {
      * @throws UnknownNumberException
      */
     private HtmlPage getPageByName(String phoneNumber, String name, long seconds) throws IOException, LogoutException, UnknownNumberException, NullPointerException, TargetPageNotFoundException {
+
+        // change phoneNumber account here
         overviewPage = mainPage;
         /*
-        // uncomment this, if account owns more phoneNumbers
+        // uncomment this, if account owns >1 phoneNumbers & login transfer you to
         if ( isFirst ){
             getOverviewPage = getOverviewPage (phoneNumber);
             isFirst = false;
@@ -398,13 +393,8 @@ public class TMobileService implements TMobileServiceInterface {
         */
 
         overviewPage = openSideNav(overviewPage);
-        //System.out.println("sidenav: " + overviewPage.asText());
-
-        HtmlPage finalPage = targetPage(overviewPage, name);
-
+        HtmlPage finalPage = getTargetPage(overviewPage, name);
         sleep(seconds);
-
-        System.out.println("Final page: \n" + finalPage.asText());
 
         return finalPage;
     }
@@ -436,7 +426,7 @@ public class TMobileService implements TMobileServiceInterface {
      * @return final @param name's page
      * @throws IOException
      */
-    private HtmlPage targetPage(HtmlPage overviewPage, String name) throws IOException, TargetPageNotFoundException {
+    private HtmlPage getTargetPage(HtmlPage overviewPage, String name) throws IOException, TargetPageNotFoundException {
         List<HtmlAnchor> anchors = overviewPage.getAnchors();
 
         HtmlAnchor link;
@@ -465,7 +455,7 @@ public class TMobileService implements TMobileServiceInterface {
 
     /*
       |=================================================================================================================
-      | UNUSED FUNCTIONS
+      | METHODS FOR CHOOSING PHONE NUMBER AFTER LOGIN
       |=================================================================================================================
      */
 

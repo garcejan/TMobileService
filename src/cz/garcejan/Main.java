@@ -81,34 +81,13 @@ public class Main {
             throw new Exception("MyTariff test0 failed");
         }
 
-        // test1
-        try {
-            TMobileService test1 = new TMobileService();
-            if (!test1.login("1105092013", "tmcz-97Ahp93k").equals(TMobileServerResponse.LOGIN_SUCCESSFUL))
-                System.out.println("test1 failed");
-
-            TMobileMyTariff tMobileMyTariff = test1.getMyTariff("twehagh");
-            System.out.println("============================================================================================================");
-            System.out.println(tMobileMyTariff.getMyTariff());
-
-            for (Map.Entry entry : tMobileMyTariff.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("MyTariff test1 success");
-        }
-
         // test2
         try {
             TMobileService test2 = new TMobileService();
             if (!test2.login("1105092013", "tmcz-97Ahp93k").equals(TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test2 failed");
 
-            TMobileMyTariff tMobileMyTariff = test2.getMyTariff("739316504");
+            TMobileMyTariff tMobileMyTariff = test2.getMyTariff("");
             System.out.println("============================================================================================================");
             System.out.println(tMobileMyTariff.getMyTariff());
             System.out.println("============================================================================================================");
@@ -148,24 +127,6 @@ public class Main {
             throw new Exception("ServiceSettings test0 failed");
         }
 
-        // test1
-        try {
-            TMobileService test1 = new TMobileService();
-            if (!test1.login("1105092013", "xxx").equals(TMobileServerResponse.LOGIN_SUCCESSFUL))
-                System.out.println("test1 failed");
-
-            TMobileServiceSettings tMobileServiceSettings = test1.getServiceSettings("twehagh");
-            System.out.println("============================================================================================================");
-            for (Map.Entry entry : tMobileServiceSettings.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Service settings test1 success");
-        }
 
         // test2
         try {
@@ -173,7 +134,7 @@ public class Main {
             if (!test2.login("1105092013", "tmcz-97Ahp93k").equals(TMobileServerResponse.LOGIN_SUCCESSFUL))
                 System.out.println("test2 failed");
 
-            TMobileServiceSettings tMobileServiceSettings = test2.getServiceSettings("739316504");
+            TMobileServiceSettings tMobileServiceSettings = test2.getServiceSettings("");
             System.out.println("============================================================================================================");
 
             for (Map.Entry entry : tMobileServiceSettings.getData().entrySet()) {
@@ -183,7 +144,7 @@ public class Main {
 
         } catch (Exception e) {
             e.printStackTrace();
-            throw new Exception("Service settings test0 failed");
+            throw new Exception("Service settings test2 failed");
         }
 
         System.out.println("--------------SERVICE SETTINGS TESTS FINISHED--------------");
@@ -199,65 +160,20 @@ public class Main {
                 System.out.println("test0 failed");
 
             if (test0.resetDataRoamingLimit("") != TMobileServerResponse.TASK_SUCCESSFUL) {
-                exit(5);
+                exit(1);
             }
             System.out.println("============================================================================================================");
             TMobileServerResponse response = test0.holidaySuspending("", "22.1.2020", "22.1.2020");
             if (response != TMobileServerResponse.TASK_SUCCESSFUL) {
                 System.out.println(response);
-                exit(1);
-            }
-            System.out.println("============================================================================================================");
-            if (test0.resetDataRoamingLimit("") != TMobileServerResponse.TASK_SUCCESSFUL) {
                 exit(2);
             }
+            System.out.println("============================================================================================================");
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Reset data roaming limit test0 failed");
-            exit(1);
+            exit(3);
         }
-
-    }
-
-    @SuppressWarnings("Duplicates")
-    private static void tests() {
-        // test0
-        try {
-            TMobileService test0 = new TMobileService();
-            if (!test0.login("1105092013", "tmcz-97Ahp93k").equals(TMobileServerResponse.LOGIN_SUCCESSFUL))
-                System.out.println("test0 failed");
-
-            TMobileMyTariff tMobileMyTariff = test0.getMyTariff(" ");
-            System.out.println("============================================================================================================");
-            System.out.println(tMobileMyTariff.getMyTariff());
-
-            for (Map.Entry entry : tMobileMyTariff.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-
-            TMobileServiceSettings tMobileServiceSettings = test0.getServiceSettings(" ");
-            System.out.println("============================================================================================================");
-
-            for (Map.Entry entry : tMobileServiceSettings.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-
-            TMobileMyTariff tMobileMyTariff1 = test0.getMyTariff(" ");
-            System.out.println("============================================================================================================");
-            System.out.println(tMobileMyTariff.getMyTariff());
-
-            for (Map.Entry entry : tMobileMyTariff1.getData().entrySet()) {
-                System.out.println("key: " + entry.getKey() + "; value: " + entry.getValue());
-            }
-            System.out.println("============================================================================================================");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("MyTariff test0 failed");
-        }
-
 
     }
 
@@ -267,11 +183,10 @@ public class Main {
             //myTariffTests();
             //serviceSettingsTests();
             activationTests();
-            //tests();
 
         } catch (Exception e) {
             System.out.println(e);
-            exit(1);
+            exit(10);
         }
     }
 }

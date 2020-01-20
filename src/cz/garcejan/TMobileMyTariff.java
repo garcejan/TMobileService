@@ -16,7 +16,7 @@ public class TMobileMyTariff extends TMobilePageAbstract {
     }
 
     /**
-     * Adds new data to myTariff
+     * Add myTariff name & type
      *
      * @param htmlTable = table from where we get data
      * @return true, if table size is correct, else false

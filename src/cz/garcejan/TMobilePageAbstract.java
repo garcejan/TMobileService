@@ -41,7 +41,6 @@ public abstract class TMobilePageAbstract {
                         tmpMap.put(title, tmp);
                         list.clear();
                     }
-
                     title = tableRow.getCell(0).asText();
                     isFirst = false;
                     break;
@@ -67,28 +66,23 @@ public abstract class TMobilePageAbstract {
      * @return data gained from tableRow
      */
     private TMobileData parseRow(HtmlTableRow tableRow) {
-        //Name of service
-        String name = tableRow.getCell(0).asText();
-
-        //service is enabled
+        String name = tableRow.getCell(0).asText(); // service name
+        String price = tableRow.getCell(3).asText(); // price of service
         boolean enabled = true;
 
         /*
-        //bubble bubble-top bubble-red a bubble bubble-top bubble-green //div[contains(@class, 'date')]
-         List<HtmlElement> elements = tableRow.getCell(2).getByXPath("/tr/td/div[contains(@class, 'bubble-red')]");
-        System.out.println(  tableRow.getCell(2).asText() + " : " + tableRow.getCell(2));
-        if ( elements.size() > 0){
-            System.out.println("element size" + elements.size());
+        // better way to control enabled service, but I couldn't get current bubble color - colors are bubble bubble-top bubble-red & bubble bubble-top bubble-green
+        // (run out of ideas)
+        List<HtmlElement> elements = tableRow.getCell(2).getByXPath("/tr/td/div[contains(@class, 'bubble-red')]");
+        if ( elements.size() > 0)
             enabled = false;
-        }*/
+        */
 
         if (tableRow.getCell(4).asText().contains("Aktivovat")
                 || tableRow.getCell(4).asText().contains("Odblokovat")) {
             enabled = false;
         }
 
-        //price of service
-        String price = tableRow.getCell(3).asText();
 
         if (price.equals("Zdarma"))
             return new TMobileData(name, 0, enabled);
@@ -99,7 +93,7 @@ public abstract class TMobilePageAbstract {
     /**
      * Called from parseRow
      *
-     * @return parsed double from @param string
+     * @return parsed price from @param string
      */
     private double parsePrice(String string) {
         Scanner scanner = new Scanner(string);
