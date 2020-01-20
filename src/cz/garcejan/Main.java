@@ -214,6 +214,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Reset data roaming limit test0 failed");
+            exit(1);
         }
 
     }

@@ -1,9 +1,6 @@
 package cz.garcejan;
 
-import cz.garcejan.TMobileExceptions.InvalidTableException;
-import cz.garcejan.TMobileExceptions.LogoutException;
-import cz.garcejan.TMobileExceptions.ServiceAlreadyActivatedException;
-import cz.garcejan.TMobileExceptions.UnknownNumberException;
+import cz.garcejan.TMobileExceptions.*;
 
 import java.io.IOException;
 
@@ -29,7 +26,7 @@ public interface TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException;
+    TMobileMyTariff getMyTariff(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException, TargetPageNotFoundException;
 
     /**
      * You have to use login(String username, String password ) first to sign up.
@@ -42,7 +39,7 @@ public interface TMobileServiceInterface {
      * @throws LogoutException        when you aren't signed in.
      * @throws UnknownNumberException when number wasn't found (you are not owner of this phone number)
      */
-    TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException;
+    TMobileServiceSettings getServiceSettings(String phoneNumber) throws InvalidTableException, IOException, LogoutException, UnknownNumberException, NullPointerException, TargetPageNotFoundException;
 
     /**
      * This method resets your phoneNumber data roaming limit.
@@ -55,7 +52,7 @@ public interface TMobileServiceInterface {
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
      */
-    TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    TMobileServerResponse resetDataRoamingLimit(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException, TargetPageNotFoundException;
 
 
     /**
@@ -71,17 +68,17 @@ public interface TMobileServiceInterface {
      * @throws IOException
      * @throws LogoutException        when you aren't signed in.
      */
-    TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    TMobileServerResponse holidaySuspending(String phoneNumber, String from, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException, TargetPageNotFoundException;
 
     /**
      * Set holiday suspending from today to @param to
      */
-    TMobileServerResponse holidaySuspending(String phoneNumber, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    TMobileServerResponse holidaySuspending(String phoneNumber, String to) throws UnknownNumberException, IOException, LogoutException, NullPointerException, TargetPageNotFoundException;
 
     /**
      * Set holiday suspending for a week from today
      */
-    TMobileServerResponse holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    TMobileServerResponse holidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException, TargetPageNotFoundException;
 
     /**
      * This method deactivates phoneNumber holiday suspending.
@@ -95,6 +92,6 @@ public interface TMobileServiceInterface {
      * @throws LogoutException
      * @throws NullPointerException
      */
-    TMobileServerResponse deactivateHolidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException;
+    TMobileServerResponse deactivateHolidaySuspending(String phoneNumber) throws UnknownNumberException, IOException, LogoutException, NullPointerException, TargetPageNotFoundException;
 
 }
